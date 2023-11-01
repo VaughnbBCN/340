@@ -37,90 +37,64 @@
     <main>
       <section>
 
-    <h2>Customers</h2>
+    <h2>Appointments</h2>
     <p>
    
 
     <table>
         <tr>
             <th> New <th> 
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Skin Type ID </th>
-          <th> Phone Number</th>
+          <th>Appointment ID </th>
+          <th>Date & Time</th>
+          <th>Total Price </th>
+          <th>Status</th>
         </tr>
         <tr>
             <td>update</td>
             <td> delete</td>
-          <td>patt.cahill@example.com</td>
-          <td>Patt</td>
-          <td>Cahill</td>
           <td>1</td>
-          <td>123-456-7890</td>
+          <td>2023-11-01 10:00:00</td>
+          <td>330.00</td>
+          <td>Scheduled</td>
         </tr>
         <tr>
-            <td>update</td>
-            <td> delete</td>
-          <td>john.allen@example.com</td>
-          <td>John</td>
-          <td>Allen</td>
-          <td>2</td>
-          <td>123-456-7891</td>
-        </tr>
-        <tr>
-            <td>update</td>
-            <td> delete</td>
-            <td>louise.herrera@example.com</td>
-            <td>Louise</td>
-            <td>Herrera</td>
-            <td>3</td>
-            <td>123-456-7892</td>
-          </tr>
-          <tr>
-            <td>update</td>
-            <td> delete</td>
-            <td>kit.coffee@example.com</td>
-            <td>Kit</td>
-            <td>Coffee</td>
-            <td>1</td>
-            <td>123-456-7893</td>
-          </tr>
-          <tr>
-            <td>update</td>
-            <td> delete</td>
-            <td>bob.jones@example.com</td>
-            <td>Bob</td>
-            <td>Jones</td>
-            <td>2</td>
-            <td>123-456-7894</td>
-          </tr>
+          <td>update</td>
+          <td> delete</td>
+        <td>2</td>
+        <td>2023-11-01 14:00:00</td>
+        <td>485.00</td>
+        <td>Scheduled</td>
+      </tr>
+      <tr>
+        <td>update</td>
+        <td> delete</td>
+      <td>3</td>
+      <td>2023-11-01 14:00:00</td>
+      <td>330.00</td>
+      <td>Scheduled</td>
+    </tr>
+
       </table>
 </p>
 <p>
 <form>
-<legend> Add Customer </legend>
-<label for="textinput" class="required">Email Address</label>
+<legend> Add Appointment </legend>
+<label for="textinput" class="required">Appointment ID</label>
 <input type="text" 
   name="name"  
   class="required" 
  />
- <label for="textinput" class="required">First Name</label>
+ <label for="textinput" class="required">Date & Time</label>
 <input type="text" 
   name="name"  
   class="required" 
  />
- <label for="textinput" class="required">Last Name</label>
+ <label for="textinput" class="required">Total Price</label>
 <input type="text" 
   name="name"  
   class="required" 
  />
- <label for="textinput" class="required">Skin Type ID</label>
-<input type="text" 
-  name="name"  
-  class="required" 
- />
- <label for="textinput" class="required">Phone Number</label>
+ <label for="textinput" class="required">Status</label>
 <input type="text" 
   name="name"  
   class="required" 
@@ -134,42 +108,36 @@
   name="results"
   accesskey="s" 
   tabindex="19" 
->Add Customer</button></label>
+>Add Appointment</button></label>
 </fieldset>
 </form></p>
 
 <p>
 <form>
-  <legend> Update Customer </legend>
-  <label for="textinput" class="required">Email Address</label>
+  <legend> Update Appointment </legend>
+  <label for="textinput" class="required">Appointment ID</label>
   <input type="text" 
     name="name"  
     class="required" 
-    placeholder="patt.cahill@example.com"
+    placeholder="ID"
    />
-   <label for="textinput" class="required">First Name</label>
+   <label for="textinput" class="required">Date & Time</label>
   <input type="text" 
     name="name"  
     class="required" 
-    placeholder="Patt"
+    placeholder="Date Time "
    />
-   <label for="textinput" class="required">Last Name</label>
+   <label for="textinput" class="required">Total Price</label>
   <input type="text" 
     name="name"  
     class="required" 
-     placeholder="Cahill"
+     placeholder="Dollar Amount"
    />
-   <label for="textinput" class="required">Skin Type ID</label>
+   <label for="textinput" class="required">Status</label>
   <input type="text" 
     name="name"  
     class="required" 
-    placeholder="1"
-   />
-   <label for="textinput" class="required">Phone Number</label>
-  <input type="text" 
-    name="name"  
-    class="required" 
-    placeholder="123-456-7890"
+    placeholder="scheduled"
    />
   </fieldset>
   
@@ -180,32 +148,37 @@
     name="results"
     accesskey="s" 
     tabindex="19" 
-  >Update Customer</button></label>
+  >Update Appointment</button></label>
   </fieldset>
   </form></p>
   <p>
     <p>
       <form>
-        <legend> Delete Customer </legend>
-        <label for="textinput" class="required">Email Address</label>
+        <legend> Delete Appointment </legend>
+        <label for="textinput" class="required">Appointment ID</label>
         <input type="text" 
           name="name"  
           class="required" 
-          placeholder="patt.cahill@example.com"
+          placeholder="1"
          />
-         <label for="textinput" class="required">First Name</label>
+         <label for="textinput" class="required">Date & Time</label>
         <input type="text" 
           name="name"  
           class="required" 
-          placeholder="Patt"
+          placeholder="2023-11-01 10:00:00"
          />
-         <label for="textinput" class="required">Last Name</label>
+         <label for="textinput" class="required">Total Price</label>
         <input type="text" 
           name="name"  
           class="required" 
-           placeholder="Cahill"
+           placeholder="Dollar Amount"
          />
-        
+         <label for="textinput" class="required">Status</label>
+         <input type="text" 
+           name="name"  
+           class="required" 
+            placeholder="Scheduled"
+          />
         
         
         <label for="submit">
@@ -214,7 +187,7 @@
           name="results"
           accesskey="s" 
           tabindex="19" 
-        >Delete Customer</button></label>
+        >Delete Appointment</button></label>
         </fieldset>
         </form>
     <!--
