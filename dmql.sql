@@ -73,52 +73,53 @@ DELETE FROM Orders WHERE orderid = :orderID_DropDown_selected_to_delete;
 
 
 /*Read operation for OrderDetails entity*/
-SELECT * FROM Customers;
+SELECT * FROM OrderDetails;
 
-/*Create operation for Customers entity*/
-INSERT INTO Customers(email, firstName, lastName, skinTypeID)
-VALUES( :customerEmailInput, :customerFirstNameInput, :customerLastNameInput, :customerSkinTypeIDInput);
+/*Create operation for OrderDetails entity*/
+INSERT INTO OrderDetails(orderID, productID, quantity, orderSubtotal)
+VALUES( :orderIDInput, :productIDInput, :quantityInput, :orderSubtotalInput);
 
-/*Delete operation for Customers entity*/
-DELETE FROM Customers WHERE id = :customer_ID_DropDown_selected_to_delete;
+/*Delete operation for OrderDetails entity*/
+DELETE FROM OrderDetails WHERE id = :orderDetailsID_DropDown_selected_to_delete;
 
-/*Update operation for Customers entity*/
-UPDATE Customers
-SET email = :customerEmailInput, lastName= :customerLastNameInputrentalPriceInput, 
-WHERE id= :game_ID_DropDown_selected_to_update;
+/*Update operation for OrderDetails entity*/
+UPDATE OrderDetails
+SET quantity = :quantityInput, orderSubtotal :orderSubtotalInput, 
+WHERE id= :orderDetailsID_DropDown_selected_to_update;
 
 
 
 /*Read operation for Appointments entity*/
-SELECT * FROM Customers;
+SELECT * FROM Appointments;
 
-/*Create operation for Customers entity*/
-INSERT INTO Customers(email, firstName, lastName, skinTypeID)
-VALUES( :customerEmailInput, :customerFirstNameInput, :customerLastNameInput, :customerSkinTypeIDInput);
+/*Create operation for Appointments entity*/
+INSERT INTO Appointments(customerID, appointmentDate, totalPrice, status)
+VALUES( :customerIDInput, :appointmentDateInput, :totalPriceInput, :statusInput);
 
-/*Delete operation for Customers entity*/
-DELETE FROM Customers WHERE id = :customer_ID_DropDown_selected_to_delete;
+/*Delete operation for Appointments entity*/
+DELETE FROM Appointments WHERE id = :appointmentID_DropDown_selected_to_delete;
 
-/*Update operation for Customers entity*/
-UPDATE Customers
-SET email = :customerEmailInput, lastName= :customerLastNameInputrentalPriceInput, 
-WHERE id= :game_ID_DropDown_selected_to_update;
+/*Update operation for Appointments entity*/
+UPDATE Appointments
+SET status = :statusInput
+WHERE id= :appointmentID_DropDown_selected_to_update;
+
 
 
 /*Read operation for AppointmentServices entity*/
-SELECT * FROM Customers;
+SELECT * FROM AppointmentServices;
 
-/*Create operation for Customers entity*/
-INSERT INTO Customers(email, firstName, lastName, skinTypeID)
-VALUES( :customerEmailInput, :customerFirstNameInput, :customerLastNameInput, :customerSkinTypeIDInput);
+/*Create operation for AppointmentServices entity*/
+INSERT INTO AppointmentServices(appointmentID, serviceID)
+VALUES( :appointmentIDInput, :serviceIDInput);
 
-/*Delete operation for Customers entity*/
-DELETE FROM Customers WHERE id = :customer_ID_DropDown_selected_to_delete;
+/*Delete operation for AppointmentServices entity*/
+DELETE FROM AppointmentServices WHERE id = :appointmentServicesID_DropDown_selected_to_delete;
 
-/*Update operation for Customers entity*/
-UPDATE Customers
-SET email = :customerEmailInput, lastName= :customerLastNameInputrentalPriceInput, 
-WHERE id= :game_ID_DropDown_selected_to_update;
+/*Update operation for AppointmentServices entity*/
+UPDATE AppointmentServices
+SET serviceID =: serviceIDInput
+WHERE id= :appointmentServicesID_DropDown_selected_to_update;
 
 
 -- dis-associate a service from an appointment where a customer has changed their mind about what services they wish to receive
@@ -128,19 +129,19 @@ DELETE FROM AppointmentServices WHERE appointmentID
 
 
 /*Read operation for SkinTypes entity*/
-SELECT * FROM Customers;
+SELECT * FROM SkinTypes;
 
-/*Create operation for Customers entity*/
-INSERT INTO Customers(email, firstName, lastName, skinTypeID)
-VALUES( :customerEmailInput, :customerFirstNameInput, :customerLastNameInput, :customerSkinTypeIDInput);
+/*Create operation for SkinTypes entity*/
+INSERT INTO SkinTypes(skinTypeDescription)
+VALUES( :skinTypeDescriptionInput);
 
-/*Delete operation for Customers entity*/
-DELETE FROM Customers WHERE id = :customer_ID_DropDown_selected_to_delete;
+/*Delete operation for SkinTypes entity*/
+DELETE FROM SkinTypes WHERE id = :skinTypeID_DropDown_selected_to_delete;
 
-/*Update operation for Customers entity*/
-UPDATE Customers
-SET email = :customerEmailInput, lastName= :customerLastNameInputrentalPriceInput, 
-WHERE id= :game_ID_DropDown_selected_to_update;
+/*Update operation for SkinTypes entity*/
+UPDATE SkinTypes
+SET skinTypeDescription = :skinTypeDescriptionInput, 
+WHERE id= : skinTypeID_DropDown_selected_to_update;
 
 
 
@@ -172,15 +173,6 @@ INNER JOIN bsg_cert_people ON bsg_people.character_id = bsg_cert_people.pid
 INNER JOIN bsg_cert on bsg_cert.certification_id = bsg_cert_people.cid
 ORDER BY name, certificate
 
--- add a new character
-INSERT INTO bsg_people (fname, lname, homeworld, age) VALUES
-(:fnameInput, :lnameInput, :homeworld_id_from_dropdown_Input, :ageInput)
-
 -- associate a character with a certificate (M-to-M relationship addition)
 INSERT INTO bsg_cert_people (pid, cid) VALUES
 (:character_id_from_dropdown_Input, :certification_id_from_dropdown_Input)
-
--- update a character's data based on submission of the Update Character form
-UPDATE bsg_people SET fname = :fnameInput, lname= :lnameInput, homeworld
-= :homeworld_id_from_dropdown_Input, age= :ageInput WHERE
-id= :character_ID_from_the_update_form
