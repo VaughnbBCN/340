@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
-PORT        = 8448;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 8488;                 // Set a port number at the top so it's easy to change in the future
 
 
 const { engine } = require('express-handlebars');
@@ -85,7 +85,28 @@ app.get('/', function(req, res)
     })
 });
 
-
+app.delete('/delete-customer/', function(req,res,next){
+    let data = req.body;
+    let personID = parseInt(data.id);
+    let deleteCustomer = `DELETE FROM Customers WHERE customerid = ?`;
+  
+  
+          // Run the 1st query
+          db.pool.query(deleteCustomer, [personID], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              else
+             {
+                          res.sendStatus(204);
+                      }
+                  })
+              }
+  );
 
 
 
