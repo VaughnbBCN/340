@@ -1,0 +1,62 @@
+<!-- index.hbs -->
+<h1>The server is running!</h1>
+<p>If you see this text, the server is <strong>definitely</strong> working!</p>
+
+{{!-- Create a table --}}
+<table id="customer-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the data in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.customerid}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.firstName}}</td>
+            <td>{{this.lastName}}</td>
+            <td>{{this.skintypeID}}</td>
+            <td>{{this.phoneNumber}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{!-- Form to add a record to the table  --}}
+<h2>Adding a Customer to YBBB</h2>
+<p>To add a customer, please enter their information below and click 'Submit'!</p>
+<form id="add-customer">
+    <label for="input-email">Email: </label>
+    <input type="text" name="input-email" id="input-email">
+    
+    <label for="input-firstName">First Name: </label>
+    <input type="text" name="input-firstName" id="input-firstName">
+
+     <label for="input-lastName">Last Name: </label>
+    <input type="text" name="input-lastName" id="input-lastName">
+
+    <label for="input-skinTypeID">Skin Type ID: </label>
+    <input type="number" name="input-skinTyeID" id="input-skinTypeID">
+
+    <label for="input-phoneNumber">Phone Number: </label>
+    <input type="number" name="input-phoneNumber" id="input-phoneNumber">
+
+    <input type="submit">
+</form>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_customer.js"></script>
