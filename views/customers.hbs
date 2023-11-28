@@ -1,0 +1,134 @@
+<!-- index.hbs -->
+
+<h1>Your Skin But Better</h1>
+
+<!-- Search Form -->
+<h2>Search Customers by Last Name</h2>
+<form id="search-customer" method="get" action="/">
+    <label for="input-searchLastName">Last Name: </label>
+    <input type="text" name="lastName" id="input-searchLastName">
+    <input type="submit" value="Search">
+</form>
+
+<!-- Add Customer Form -->
+<h2>Add a Customer</h2>
+<p>To add a customer, please enter their information below and click 'Submit'!</p>
+<form id="add-customer" method="post" action="/add-customer">
+    <label for="input-email">Email: </label>
+    <input type="text" name="email" id="input-email">
+    
+    <label for="input-firstName">First Name: </label>
+    <input type="text" name="firstName" id="input-firstName">
+
+    <label for="input-lastName">Last Name: </label>
+    <input type="text" name="lastName" id="input-lastName">
+
+    <label for="input-skinTypeID">Skin Type ID: </label>
+    <input type="number" name="skinTypeID" id="input-skinTypeID">
+
+    <label for="input-phoneNumber">Phone Number: </label>
+    <input type="number" name="phoneNumber" id="input-phoneNumber">
+
+    <input type="submit" value="Add Customer">
+</form>
+
+<h2>Update Customer Information</h2>
+<form id="update-customer" method="post" action="/update-customer">
+    <label for="input-updateEmail">Email (identifier): </label>
+    <input type="text" name="email" id="input-updateEmail" required>
+    
+    <label for="input-updateFirstName">First Name: </label>
+    <input type="text" name="firstName" id="input-updateFirstName">
+
+    <label for="input-updateLastName">Last Name: </label>
+    <input type="text" name="lastName" id="input-updateLastName">
+
+    <label for="input-updateSkinTypeID">Skin Type ID: </label>
+    <input type="number" name="skinTypeID" id="input-updateSkinTypeID">
+
+    <label for="input-updatePhoneNumber">Phone Number: </label>
+    <input type="number" name="phoneNumber" id="input-updatePhoneNumber">
+
+    <input type="submit" value="Update Customer">
+</form>
+
+<!-- Customer Table -->
+<!-- Customer Table -->
+<table id="customer-table">
+    <thead>
+        <tr>
+            {{#if data.length}}
+                {{#each data.[0]}}
+                <th>{{@key}}</th>
+                {{/each}}
+            {{/if}}
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+            <tr>
+                <td>{{this.customerid}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.firstName}}</td>
+                <td>{{this.lastName}}</td>
+                <td>{{this.skintypeID}}</td>
+                <td>{{this.phoneNumber}}</td>
+                <td><button onclick="deleteCustomer('{{this.email}}')">Delete</button></td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<script>
+// Function to delete a customer
+function deleteCustomer(email) {
+    fetch('/delete-customer/', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email }),
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            throw new Error('Request failed!');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+        document.getElementById('update-customer').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        let formData = {
+            email: document.getElementById('input-updateEmail').value,
+            firstName: document.getElementById('input-updateFirstName').value,
+            lastName: document.getElementById('input-updateLastName').value,
+            skinTypeID: document.getElementById('input-updateSkinTypeID').value,
+            phoneNumber: document.getElementById('input-updatePhoneNumber').value
+        };
+
+        fetch('/update-customer/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                throw new Error('Update request failed!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+}
+
+</script>

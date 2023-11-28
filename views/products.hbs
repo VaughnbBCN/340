@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <!-- Add links to your CSS files here -->
+</head>
+<body>
+    <h1>Product Management</h1>
+
+    <!-- Form for Adding a New Product -->
+    <h2>Add a New Product</h2>
+    <form id="add-product-form" action="/products/add" method="POST">
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="productName" required>
+
+        <label for="productPrice">Product Price ($):</label>
+        <input type="number" step="0.01" id="productPrice" name="productPrice" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <label for="stockQuantity">Stock Quantity:</label>
+        <input type="number" id="stockQuantity" name="stockQuantity" required>
+
+        <label for="skinTypeID">Skin Type ID:</label>
+        <input type="number" id="skinTypeID" name="skinTypeID">
+
+        <input type="submit" value="Add Product">
+    </form>
+
+    <!-- Table for Displaying Products -->
+    <h2>Available Products</h2>
+    <table id="product-table">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Stock Quantity</th>
+                <th>Skin Type ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each data}}
+            <tr>
+                <td>{{this.productID}}</td>
+                <td>{{this.productName}}</td>
+                <td>${{this.productPrice}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.stockQuantity}}</td>
+                <td>{{this.skinTypeID}}</td>
+                <td>
+                    <!-- Buttons or links for edit and delete actions -->
+                    <button onclick="editProduct('{{this.productID}}')">Edit</button>
+                    <button data-id="{{this.productID}}" onclick="deleteProduct(this)">Delete</button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <!-- Add your scripts here -->
+    <script>
+        function editProduct(productId) {
+            // code to handle the edit operation
+        }
+
+        function deleteProduct(productId) {
+            // code to handle the delete operation
+        }
+    </script>
+</body>
+</html>

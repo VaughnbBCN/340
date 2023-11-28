@@ -1,122 +1,30 @@
-// App.js
+var express = require('express');
+var app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static('public'));
 
-/*
-    SETUP
-*/
-var express = require('express');   // We are using the express library for the web server
-var app     = express();            // We need to instantiate an express object to interact with the server in our code
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use(express.static('public'))
+const PORT = 7448;
 
-PORT        = 8488;                 // Set a port number at the top so it's easy to change in the future
-
-
+// Setting up Handlebars
 const { engine } = require('express-handlebars');
-var exphbs = require('express-handlebars');     // Import express-handlebars
-app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
-app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
+app.engine('.hbs', engine({extname: ".hbs"}));
+app.set('view engine', '.hbs');
 
 // Database
-var db = require('./database/db-connector')
+var db = require('./database/db-connector');
 
-/*
-    ROUTES
-*/
-app.get('/', function(req, res)
-    {
-        let query1 = "SELECT * FROM Customers;";               // Define our query
+// Route modules
+var indexRoutes = require('./routes/index');    // Assumed you have this for your homepage
+var customerRoutes = require('./routes/customers');
+var productRoutes = require('./routes/products');
 
-        db.pool.query(query1, function(error, rows, fields){    // Execute the query
+// Use the routes
+app.use('/', indexRoutes);          // For your homepage
+app.use('/customers', customerRoutes); // Customer-related routes
+app.use('/products', productRoutes);
 
-            res.render('index', {data: rows});                  // Render the index.hbs file, and also send the renderer
-        })  
-    });                                   
-
-    app.post('/add-customer', function(req, res) 
-{
-    // Capture the incoming data and parse it back to a JS object
-    let data = req.body;
-
-    // Capture NULL values
-    let skinTypeID = parseInt(data.skinTypeID);
-    if (isNaN(skinTypeID))
-    {
-        skinTypeID = 'NULL'
-    }
-
-    let phoneNumber = parseInt(data.phoneNumber);
-    if (isNaN(phoneNumber))
-    {
-        phoneNumber = 'NULL'
-    }
-
-    // Create the query and run it on the database
-    query1 = `INSERT INTO Customers(email, firstName, lastName, skinTypeID, phoneNumber) VALUES ('${data.email}', '${data.firstName}', ${data.lastName}, ${skinTypeID}, ${phoneNumber}))`;
-    db.pool.query(query1, function(error, rows, fields){
-
-        // Check to see if there was an error
-        if (error) {
-
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error)
-            res.sendStatus(400);
-        }
-        else
-        {
-            // If there was no error, perform a SELECT * on Customers
-            query2 = `SELECT * FROM Customers;`;
-            db.pool.query(query2, function(error, rows, fields){
-
-                // If there was an error on the second query, send a 400
-                if (error) {
-                    
-                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-                    console.log(error);
-                    res.sendStatus(400);
-                }
-                // If all went well, send the results of the query back.
-                else
-                {
-                    res.send(rows);
-                }
-            })
-        }
-    })
-});
-
-app.delete('/delete-customer/', function(req,res,next){
-    let data = req.body;
-    let personID = parseInt(data.id);
-    let deleteCustomer = `DELETE FROM Customers WHERE customerid = ?`;
-  
-  
-          // Run the 1st query
-          db.pool.query(deleteCustomer, [personID], function(error, rows, fields){
-              if (error) {
-  
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-              console.log(error);
-              res.sendStatus(400);
-              }
-  
-              else
-             {
-                          res.sendStatus(204);
-                      }
-                  })
-              }
-  );
-
-
-
-
-
-
-
-/*
-    LISTENER
-*/
-app.listen(PORT, function(){            // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
-    console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.')
+// Start the server
+app.listen(PORT, function() {
+    console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.');
 });
