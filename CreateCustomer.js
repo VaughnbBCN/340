@@ -19,7 +19,7 @@ const addCustomer  = async () => {
 
     const response = await fetch('/log', {
             method: 'post',
-            body: JSON.stringify newCustomer), 
+            body: JSON.stringify (newCustomer), 
             headers: {
                 'Content-Type': 'application/json', 
             }, 
