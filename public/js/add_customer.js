@@ -30,6 +30,7 @@ addCustomerForm.addEventListener("submit", function (e) {
         skinTypeID: skinTypeIDValue,
         phoneNumber: phoneNumberValue
     }
+    console.log(data)
     
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
@@ -114,4 +115,16 @@ addRowToTable = (data) => {
     
     // Add the row to the table
     currentTable.appendChild(row);
+
+
+    // Start of new Step 8 code for adding new data to the dropdown menu for updating people
+    
+    // Find drop down menu, create a new option, fill data in the option (full name, id),
+    // then append option to drop down menu so newly created rows via ajax will be found in it without needing a refresh
+    let selectMenu = document.getElementById("mySelect");
+    let option = document.createElement("option");
+    option.text = newRow.fname + ' ' +  newRow.lname;
+    option.value = newRow.id;
+    selectMenu.add(option);
+    // End of new step 8 code.
 }
