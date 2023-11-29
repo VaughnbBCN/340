@@ -1,66 +1,38 @@
-<!-- index.hbs -->
-<h1>The server is running!</h1>
-<p>If you see this text, the server is <strong>definitely</strong> working!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Skin But Better - Home</title>
+    <!-- Add links to your CSS files here -->
+</head>
+<body>
+    <header>
+        <h1>Welcome to Your Skin But Better</h1>
+        <nav>
+            <ul>
+                <li><a href="/customers">Customers</a></li>
+                <li><a href="/products">Products</a></li>
+                <li><a href="/services">Services</a></li>
+                 <li><a href="/appointments">Appointments</a></li>
 
+            </ul>
+        </nav>
+    </header>
 
+    <main>
+        <section>
+            <h2>About the Database</h2>
+            <p>This database application allows you to manage customers, products, services, and more.</p>
+        </section>
 
-{{!-- Form to add a record to the table  --}}
-<h2>Adding a Customer to YBBB</h2>
-<p>To add a customer, please enter their information below and click 'Submit'!</p>
-<form id="add-customer">
-    <label for="input-email">Email: </label>
-    <input type="text" name="input-email" id="input-email">
-    
-    <label for="input-firstName">First Name: </label>
-    <input type="text" name="input-firstName" id="input-firstName">
+        <!-- You can add more sections here with additional information or features -->
+    </main>
 
-     <label for="input-lastName">Last Name: </label>
-    <input type="text" name="input-lastName" id="input-lastName">
+    <footer>
+        <p>&copy; 2023 Your Skin But Better. All rights reserved.</p>
+    </footer>
 
-    <label for="input-skinTypeID">Skin Type ID: </label>
-    <input type="number" name="input-skinTyeID" id="input-skinTypeID">
-
-    <label for="input-phoneNumber">Phone Number: </label>
-    <input type="number" name="input-phoneNumber" id="input-phoneNumber">
-
-    <input type="submit">
-</form>
-
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-<script src="./js/add_customer.js"></script>
-
-
-<table id="customer-table">>
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-            <th>delete</th>
-        </tr>
-    </thead>
-
-    {{!-- Body section --}}
-    <tbody>
-
-        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
-        {{#each data}}
-        <tr data-value={{this.customerid}}>>
-            <td>{{this.customerid}}</td>
-            <td>{{this.email}}</td>
-            <td>{{this.firstName}}</td>
-            <td>{{this.lastName}}</td>
-            <td>{{this.skintypeID}}</td>
-            <td>{{this.phoneNumber}}</td>
-            <td><button onclick="deletePerson({{this.id}})">Delete</button></td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-<script src="./js/delete_person.js"></script>
+    <!-- Add links to your JavaScript files here -->
+</body>
+</html>

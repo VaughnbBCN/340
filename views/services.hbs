@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Management</title>
+    <!-- Add links to your CSS files here -->
+</head>
+<body>
+    <h1>Service Management</h1>
+
+    <!-- Form for Adding a New Service -->
+    <h2>Add a New Service</h2>
+    <form id="add-service-form" action="/services/add" method="POST">
+        <label for="serviceName">Service Name:</label>
+        <input type="text" id="serviceName" name="serviceName" required>
+
+        <label for="servicePrice">Service Price ($):</label>
+        <input type="text" pattern="^\d+(\.\d{0,2})?$" title="Price must be a number with up to two decimal places." id="servicePrice" name="servicePrice" required>
+
+        <label for="duration">Duration (HH:MM:SS):</label>
+        <input type="text" pattern="\d{1,2}:\d{2}:\d{2}" title="Enter time in HH:MM:SS format." id="duration" name="duration" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <input type="submit" value="Add Service">
+    </form>
+
+    <!-- Search Form for Services -->
+    <h2>Search Services</h2>
+    <form action="/services" method="get">
+        <label for="searchQuery">Search:</label>
+        <input type="text" id="searchQuery" name="search" value="{{searchQuery}}">
+        <input type="submit" value="Search">
+    </form>
+
+    <!-- Table for Displaying Services -->
+    <h2>Available Services</h2>
+    <table id="service-table">
+        <thead>
+            <tr>
+                <th>Service ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Duration</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each services}}
+            <tr>
+                <td>{{this.serviceID}}</td>
+                <td>{{this.serviceName}}</td>
+                <td>${{this.servicePrice}}</td>
+                <td>{{this.duration}}</td>
+                <td>{{this.description}}</td>
+                <td>
+                    <!-- Edit and Delete Buttons -->
+                    <button onclick="toggleEditForm('edit-form-{{this.serviceID}}')">Edit</button>
+                    <button data-id="{{this.serviceID}}" onclick="deleteService(this)">Delete</button>
+                </td>
+            </tr>
+            <tr id="edit-form-{{this.serviceID}}" style="display:none;">
+                <td colspan="6">
+                    <!-- Edit Form -->
+                    <form action="/services/update/{{this.serviceID}}" method="post">
+                        <input type="text" name="serviceName" value="{{this.serviceName}}">
+                        <input type="text" name="servicePrice" value="{{this.servicePrice}}">
+                        <input type="text" name="duration" value="{{this.duration}}">
+                        <input type="text" name="description" value="{{this.description}}">
+                        <button type="submit">Save</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <script>
+        function deleteService(button) {
+            var serviceId = button.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this service?')) {
+                fetch('/services/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ serviceID: serviceId })
+                })
+                .then(response => {
+                    if (response.ok) { button.closest('tr').remove(); }
+                    else { alert('Failed to delete the service.'); }
+                })
+                .catch(error => { console.error('Error:', error); });
+            }
+        }
+
+        function toggleEditForm(formId) {
+            var form = document.getElementById(formId);
+            form.style.display = (form.style.display === 'none') ? 'table-row' : 'none';
+        }
+    </script>
+</body>
+</html>

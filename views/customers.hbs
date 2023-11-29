@@ -1,134 +1,106 @@
-<!-- index.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management</title>
+    <!-- Add your stylesheet links here -->
+</head>
+<body>
+    <h1>Customer Management</h1>
 
-<h1>Your Skin But Better</h1>
+    <!-- Form for Adding a New Customer -->
+    <h2>Add a New Customer</h2>
+    <form id="add-customer-form" action="/customers/add" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-<!-- Search Form -->
-<h2>Search Customers by Last Name</h2>
-<form id="search-customer" method="get" action="/">
-    <label for="input-searchLastName">Last Name: </label>
-    <input type="text" name="lastName" id="input-searchLastName">
-    <input type="submit" value="Search">
-</form>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
 
-<!-- Add Customer Form -->
-<h2>Add a Customer</h2>
-<p>To add a customer, please enter their information below and click 'Submit'!</p>
-<form id="add-customer" method="post" action="/add-customer">
-    <label for="input-email">Email: </label>
-    <input type="text" name="email" id="input-email">
-    
-    <label for="input-firstName">First Name: </label>
-    <input type="text" name="firstName" id="input-firstName">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
 
-    <label for="input-lastName">Last Name: </label>
-    <input type="text" name="lastName" id="input-lastName">
+        <label for="skinTypeID">Skin Type ID:</label>
+        <input type="number" id="skinTypeID" name="skinTypeID">
 
-    <label for="input-skinTypeID">Skin Type ID: </label>
-    <input type="number" name="skinTypeID" id="input-skinTypeID">
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber">
 
-    <label for="input-phoneNumber">Phone Number: </label>
-    <input type="number" name="phoneNumber" id="input-phoneNumber">
+        <input type="submit" value="Add Customer">
+    </form>
 
-    <input type="submit" value="Add Customer">
-</form>
-
-<h2>Update Customer Information</h2>
-<form id="update-customer" method="post" action="/update-customer">
-    <label for="input-updateEmail">Email (identifier): </label>
-    <input type="text" name="email" id="input-updateEmail" required>
-    
-    <label for="input-updateFirstName">First Name: </label>
-    <input type="text" name="firstName" id="input-updateFirstName">
-
-    <label for="input-updateLastName">Last Name: </label>
-    <input type="text" name="lastName" id="input-updateLastName">
-
-    <label for="input-updateSkinTypeID">Skin Type ID: </label>
-    <input type="number" name="skinTypeID" id="input-updateSkinTypeID">
-
-    <label for="input-updatePhoneNumber">Phone Number: </label>
-    <input type="number" name="phoneNumber" id="input-updatePhoneNumber">
-
-    <input type="submit" value="Update Customer">
-</form>
-
-<!-- Customer Table -->
-<!-- Customer Table -->
-<table id="customer-table">
-    <thead>
-        <tr>
-            {{#if data.length}}
-                {{#each data.[0]}}
-                <th>{{@key}}</th>
-                {{/each}}
-            {{/if}}
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each data}}
+    <h2>Search Customers</h2>
+        <form action="/customers" method="get">
+        <label for="searchQuery">Search:</label>
+        <input type="text" id="searchQuery" name="search" placeholder="Search by name or email" value="{{searchQuery}}">
+        <input type="submit" value="Search">
+        </form>
+        
+    <!-- Table for Displaying Customers -->
+    <h2>Customer List</h2>
+    <table id="customer-table">
+        <thead>
             <tr>
-                <td>{{this.customerid}}</td>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Skin Type ID</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each customers}}
+            <tr>
                 <td>{{this.email}}</td>
                 <td>{{this.firstName}}</td>
                 <td>{{this.lastName}}</td>
-                <td>{{this.skintypeID}}</td>
+                <td>{{this.skinTypeID}}</td>
                 <td>{{this.phoneNumber}}</td>
-                <td><button onclick="deleteCustomer('{{this.email}}')">Delete</button></td>
+                <td>
+                    <button onclick="toggleEditForm('{{this.customerID}}')">Edit</button>
+                    <button data-id="{{this.customerID}}" onclick="deleteCustomer(this)">Delete</button>
+                </td>
             </tr>
-        {{/each}}
-    </tbody>
-</table>
+            <tr id="edit-form-{{this.customerID}}" style="display:none;">
+                <td colspan="6">
+                    <!-- Edit Form -->
+                    <form action="/customers/update/{{this.customerID}}" method="post">
+                        <input type="email" name="email" value="{{this.email}}">
+                        <input type="text" name="firstName" value="{{this.firstName}}">
+                        <input type="text" name="lastName" value="{{this.lastName}}">
+                        <input type="number" name="skinTypeID" value="{{this.skinTypeID}}">
+                        <input type="tel" name="phoneNumber" value="{{this.phoneNumber}}">
+                        <button type="submit">Save</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 
-<script>
-// Function to delete a customer
-function deleteCustomer(email) {
-    fetch('/delete-customer/', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: email }),
-    })
-    .then(response => {
-        if (response.ok) {
-            location.reload();
-        } else {
-            throw new Error('Request failed!');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-        document.getElementById('update-customer').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        let formData = {
-            email: document.getElementById('input-updateEmail').value,
-            firstName: document.getElementById('input-updateFirstName').value,
-            lastName: document.getElementById('input-updateLastName').value,
-            skinTypeID: document.getElementById('input-updateSkinTypeID').value,
-            phoneNumber: document.getElementById('input-updatePhoneNumber').value
-        };
-
-        fetch('/update-customer/', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-        .then(response => {
-            if (response.ok) {
-                location.reload();
-            } else {
-                throw new Error('Update request failed!');
+    <script>
+        function deleteCustomer(button) {
+            var customerId = button.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this customer?')) {
+                fetch('/customers/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customerID: customerId })
+                })
+                .then(response => {
+                    if (response.ok) { button.closest('tr').remove(); }
+                    else { alert('Failed to delete the customer.'); }
+                })
+                .catch(error => { console.error('Error:', error); });
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-}
+        }
 
-</script>
+        function toggleEditForm(customerId) {
+            var form = document.getElementById('edit-form-' + customerId);
+            form.style.display = (form.style.display === 'none') ? 'table-row' : 'none';
+        }
+    </script>
+</body>
+</html>
