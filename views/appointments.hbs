@@ -9,11 +9,24 @@
 <body>
     <h1>Appointment Management</h1>
 
+    <!-- Search Form for Appointments -->
+    <h2>Search Appointments</h2>
+    <form action="/appointments" method="get">
+        <label for="searchQuery">Search by Customer Name:</label>
+        <input type="text" id="searchQuery" name="search">
+        <input type="submit" value="Search">
+    </form>
+
     <!-- Form for Adding a New Appointment -->
     <h2>Add a New Appointment</h2>
     <form id="add-appointment-form" action="/appointments/add" method="POST">
-        <label for="customerID">Customer ID:</label>
-        <input type="number" id="customerID" name="customerID" required>
+        <!-- Assuming you have a route to fetch customers and render this template with 'customers' data -->
+        <label for="customer">Customer:</label>
+        <select name="customerID" id="customer">
+            {{#each customers}}
+            <option value="{{this.customerID}}">{{this.firstName}} {{this.lastName}}</option>
+            {{/each}}
+        </select>
 
         <label for="appointmentDate">Appointment Date:</label>
         <input type="datetime-local" id="appointmentDate" name="appointmentDate" required>
@@ -30,7 +43,7 @@
         <thead>
             <tr>
                 <th>Appointment ID</th>
-                <th>Customer ID</th>
+                <th>Customer Name</th> <!-- Updated to show customer name -->
                 <th>Appointment Date</th>
                 <th>Total Price</th>
                 <th>Status</th>
@@ -41,7 +54,7 @@
             {{#each appointments}}
             <tr>
                 <td>{{this.appointmentID}}</td>
-                <td>{{this.customerID}}</td>
+                <td>{{this.firstName}} {{this.lastName}}</td> <!-- Displaying customer name -->
                 <td>{{this.appointmentDate}}</td>
                 <td>${{this.totalPrice}}</td>
                 <td>{{this.status}}</td>
@@ -54,6 +67,7 @@
                 <td colspan="6">
                     <!-- Edit Form -->
                     <form action="/appointments/update/{{this.appointmentID}}" method="post">
+                        <!-- The edit form can also use the customer dropdown if needed -->
                         <input type="number" name="customerID" value="{{this.customerID}}">
                         <input type="datetime-local" name="appointmentDate" value="{{this.appointmentDate}}">
                         <input type="text" name="totalPrice" value="{{this.totalPrice}}">
@@ -69,7 +83,7 @@
             {{/each}}
         </tbody>
     </table>
-
+    
     <script>
         function deleteAppointment(button) {
             var appointmentId = button.getAttribute('data-id');

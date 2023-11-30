@@ -2,76 +2,92 @@ var express = require('express');
 var router = express.Router();
 var db = require('../database/db-connector');
 
+// Route to display all appointments with customer details
 router.get('/', function(req, res) {
     let query = `
-        SELECT Appointments.*, Customers.firstName, Customers.lastName
+        SELECT Appointments.appointmentID, Appointments.appointmentDate, 
+               Appointments.totalPrice, Appointments.status, 
+               Customers.firstName, Customers.lastName, Customers.customerID
         FROM Appointments
-        JOIN Customers ON Appointments.customerID = Customers.customerID;
-    `;
+        JOIN Customers ON Appointments.customerID = Customers.customerID
+    `; // Removed the semicolon here
 
-    db.pool.query(query, function(error, results, fields) {
+    const searchQuery = req.query.search;
+    if (searchQuery) {
+        query += ` WHERE Customers.firstName LIKE '%${searchQuery}%' 
+                   OR Customers.lastName LIKE '%${searchQuery}%'`;
+    }
+
+    db.pool.query(query, function(error, results) {
         if (error) {
             console.error("Error fetching appointments: ", error);
-            res.sendStatus(500); // Internal Server Error
+            res.sendStatus(500);
             return;
         }
-
-        // Optional: Format the data if needed (like date formatting)
-        const formattedResults = results.map(appointment => {
-            // Example: Formatting appointment date
-            // You can add any additional formatting logic here
-            appointment.formattedDate = formatDate(appointment.appointmentDate);
-            return appointment;
-        });
-
-        // Render the appointments page and pass the retrieved data
-        res.render('appointments', {
-            appointments: formattedResults
-        });
+        res.render('appointments', { appointments: results });
     });
 });
 
-// Route to add a new appointment
+// Route for displaying the form to add a new appointment
+router.get('/add', function(req, res) {
+    db.pool.query('SELECT customerID, firstName, lastName FROM Customers', function(error, customers) {
+        if (error) {
+            console.error("Error fetching customers: ", error);
+            res.sendStatus(500);
+            return;
+        }
+        res.render('appointments', { customers: customers });
+    });
+});
+
+// Route to handle the creation of a new appointment
 router.post('/add', function(req, res) {
-    let data = req.body;
-    // Assuming your Appointments table has a 'status' column you want to set to 'Scheduled' by default
-    let query = `INSERT INTO Appointments (customerID, appointmentDate, totalPrice, status) VALUES (?, ?, ?, 'Scheduled')`;
-    
-    db.pool.query(query, [data.customerID, data.appointmentDate, data.totalPrice], function(error, results, fields) {
+    const { customerID, appointmentDate, totalPrice, status } = req.body;
+    let insertQuery = `
+        INSERT INTO Appointments (customerID, appointmentDate, totalPrice, status) 
+        VALUES (?, ?, ?, ?)
+    `;
+
+    db.pool.query(insertQuery, [customerID, appointmentDate, totalPrice, status], function(error) {
         if (error) {
-            console.log(error);
-            res.status(400).send("Failed to add appointment.");
+            console.error("Error adding new appointment: ", error);
+            res.sendStatus(500);
             return;
         }
         res.redirect('/appointments');
     });
 });
 
-// Route to update an appointment
+// Route to handle the updating of an appointment
 router.post('/update/:id', function(req, res) {
+    const { customerID, appointmentDate, totalPrice, status } = req.body;
     const appointmentId = req.params.id;
-    const data = req.body;
-    let updateQuery = 'UPDATE Appointments SET customerID = ?, appointmentDate = ?, totalPrice = ?, status = ? WHERE appointmentID = ?';
+    let updateQuery = `
+        UPDATE Appointments 
+        SET customerID = ?, appointmentDate = ?, totalPrice = ?, status = ? 
+        WHERE appointmentID = ?
+    `;
 
-    db.pool.query(updateQuery, [data.customerID, data.appointmentDate, data.totalPrice, data.status, appointmentId], function(error, results) {
+    db.pool.query(updateQuery, [customerID, appointmentDate, totalPrice, status, appointmentId], function(error) {
         if (error) {
-            console.error(error);
-            res.status(500).send('Server error while updating appointment.');
+            console.error("Error updating appointment: ", error);
+            res.sendStatus(500);
             return;
         }
         res.redirect('/appointments');
     });
 });
 
-// Route to delete an appointment
-router.post('/delete', function(req, res) {
-    const appointmentId = req.body.appointmentID;
-    const deleteAppointmentQuery = `DELETE FROM Appointments WHERE appointmentID = ?`;
+// Route to handle the deletion of an appointment
+router.post('/delete/:id', function(req, res) {
+    const appointmentId = req.params.id;
+    let deleteQuery = 'DELETE FROM Appointments WHERE appointmentID = ?';
 
-    db.pool.query(deleteAppointmentQuery, [appointmentId], function(error, results) {
+    db.pool.query(deleteQuery, [appointmentId], function(error) {
         if (error) {
-            console.error(error);
-            return res.status(500).send('Error deleting appointment.');
+            console.error("Error deleting appointment: ", error);
+            res.sendStatus(500);
+            return;
         }
         res.redirect('/appointments');
     });
