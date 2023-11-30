@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Website to demonstrate CS340 database technologies"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Your Skin But Better</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <header>  <h1>Your Skin But Better</h1> </header>
+    <nav>
+      <a href="index.html">Home Page</a>
+      <a href="Customer.html">Customer</a>
+      <a href="Appointments.html">Appointment</a>
+       <a href="AppointmentServices.html">Appointment Services</a>
+       <a href="Orders.html">Orders</a>
+       <a href="OrderDetails.html">Order Details</a>
+       <a href="Products.html">Products</a>
+       <a href="Services.html">Services</a>
+       <a href="SkinType.html">Skin Type</a>
+     
+  </nav>
+    <main>
+      <section>
+
+    <h2>Skin Type</h2>
+    <p>
+   
+
+    <table>
+        <tr>
+            <th> New <th> 
+          <th>SkinType ID </th>
+          <th>Description </th>
+        </tr>
+        <tr>
+            <td>update</td>
+            <td> delete</td>
+          <td>1</td>
+          <td>Oily</td>
+        </tr>
+        <tr>
+          <td>update</td>
+          <td> delete</td>
+        <td>2</td>
+        <td>Dry</td>
+      </tr>
+      <tr>
+        <td>update</td>
+        <td> delete</td>
+      <td>3</td>
+      <td>Combination</td>
+    </tr>
+      </table>
+</p>
+<p>
+<form>
+<legend> Add Skin Type </legend>
+<label for="textinput" class="required">Skin Type ID</label>
+<input type="text" 
+  name="name"  
+  class="required" 
+ />
+ <label for="textinput" class="required">Description</label>
+<input type="text" 
+  name="name"  
+  class="required" 
+ />
+</fieldset>
+
+<label for="submit">
+<button type="submit"
+  id="submit" 
+  name="results"
+  accesskey="s" 
+  tabindex="19" 
+>Add Skin Type</button></label>
+</fieldset>
+</form></p>
+
+<p>
+<form>
+  <legend> Update Skin Type </legend>
+  <label for="textinput" class="required">Skin Type ID</label>
+  <input type="text" 
+    name="name"  
+    class="required" 
+    placeholder="1"
+   />
+   <label for="textinput" class="required">Description</label>
+  <input type="text" 
+    name="name"  
+    class="required" 
+    placeholder="Oily "
+   />
+  </fieldset>
+  
+  <label for="submit">
+  <button type="submit"
+    id="submit" 
+    name="results"
+    accesskey="s" 
+    tabindex="19" 
+  >Update Skin Type</button></label>
+  </fieldset>
+  </form></p>
+  
+  <p>
+    <form>
+      <legend> Delete Skin Type </legend>
+      <label for="textinput" class="required">Order ID</label>
+      <input type="text" 
+        name="name"  
+        class="required" 
+        placeholder="1"
+       />
+       <label for="textinput" class="required">Description</label>
+      <input type="text" 
+        name="name"  
+        class="required" 
+        placeholder="Oily"
+       />
+      </fieldset>
+      
+      <label for="submit">
+      <button type="submit"
+        id="submit" 
+        name="results"
+        accesskey="s" 
+        tabindex="19" 
+      >Delete Skin Type</button></label>
+      </fieldset>
+      </form></p>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+</section> </main> 
+  </body>
+</html>
