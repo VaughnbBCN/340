@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
     const searchQuery = req.query.search;
 
     if (searchQuery) {
-        query += " WHERE skinType LIKE '%" + searchQuery + "%' ";
+        query += " WHERE skinTypeID LIKE '%" + searchQuery + "%' ";
     }
 
     db.pool.query(query, function(error, results, fields) {
