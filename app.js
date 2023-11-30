@@ -30,6 +30,7 @@ var skintypeRoutes = require('./routes/skintypes');
 
 // Use the routes
 app.use('/', indexRoutes);
+app.use(express.static('public'));
 app.use('/customers', customerRoutes);
 app.use('/products', productRoutes);
 app.use('/services', serviceRoutes);
