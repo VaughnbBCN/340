@@ -4,7 +4,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const PORT = 7446;
+const PORT = 7432;
 
 // Setting up Handlebars with custom helper 'eq'
 const { engine } = require('express-handlebars');

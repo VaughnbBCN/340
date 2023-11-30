@@ -57,9 +57,10 @@ router.post('/update/:id', function(req, res) {
 // Route to delete an order
 router.post('/delete', function(req, res) {
     const orderID = req.body.orderID;
-    const deleteOrderQuery = `DELETE FROM orders WHERE orderID = ?`;
+    const deleteOrderQuery = `DELETE FROM Orders WHERE orderID = ?`;
 
-    db.pool.deleteOrderQuery, [orderID], function(error, results) {
+    
+    db.pool.query(deleteOrderQuery, [orderID], function(error, results) {
         if (error) {
             console.error(error);
             return res.status(500).send('Error deleting order.');

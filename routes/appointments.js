@@ -2,15 +2,15 @@ var express = require('express');
 var router = express.Router();
 var db = require('../database/db-connector');
 
-// Route to display all appointments with customer details
+// Route to display all appointments with customer details and handle search
 router.get('/', function(req, res) {
     let query = `
         SELECT Appointments.appointmentID, Appointments.appointmentDate, 
                Appointments.totalPrice, Appointments.status, 
                Customers.firstName, Customers.lastName, Customers.customerID
         FROM Appointments
-        JOIN Customers ON Appointments.customerID = Customers.customerID
-    `; // Removed the semicolon here
+        LEFT JOIN Customers ON Appointments.customerID = Customers.customerID
+    `;
 
     const searchQuery = req.query.search;
     if (searchQuery) {
@@ -36,7 +36,7 @@ router.get('/add', function(req, res) {
             res.sendStatus(500);
             return;
         }
-        res.render('appointments', { customers: customers });
+        res.render('add-appointment', { customers: customers });
     });
 });
 
@@ -94,3 +94,4 @@ router.post('/delete/:id', function(req, res) {
 });
 
 module.exports = router;
+

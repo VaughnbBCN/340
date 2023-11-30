@@ -2,69 +2,73 @@ var express = require('express');
 var router = express.Router();
 var db = require('../database/db-connector');
 
-// Route to display all SkinTypes with search functionality
+// Route to display all SkinTypes
 router.get('/', function(req, res) {
     let query = "SELECT * FROM SkinTypes";
-    const searchQuery = req.query.search;
-
-    if (searchQuery) {
-        query += " WHERE skinType LIKE '%" + searchQuery + "%' ";
-    }
-
-    db.pool.query(query, function(error, results, fields) {
+    db.pool.query(query, function(error, results) {
         if (error) {
             console.error(error);
             res.sendStatus(500);
             return;
         }
-        res.render('SkinTypes', { 
-            SkinTypes: results,
-            searchQuery: searchQuery  // Include the search query in the rendered variables
-        });
+        res.render('skintypes', { skinTypes: results });
     });
 });
 
-// Route to add a new skinType
+// Route to add a new SkinType
 router.post('/add', function(req, res) {
     let data = req.body;
-    let query = `INSERT INTO SkinTypes (skinTypeDescription) VALUES ( ?)`;
-    db.pool.query(query, [ data.description], function(error, results, fields) {
+    let query = "INSERT INTO SkinTypes (description) VALUES (?)";
+    db.pool.query(query, [data.description], function(error) {
         if (error) {
-            console.log(error);
-            res.status(400).send("Failed to add skinType.");
+            console.error(error);
+            res.sendStatus(500);
             return;
         }
-        res.redirect('/SkinTypes');
+        res.redirect('/skintypes');
     });
 });
 
-// Route to update a skinType
+// Route to render the update form for a SkinType
+router.get('/edit/:id', function(req, res) {
+    const skinTypeID = req.params.id;
+    let query = "SELECT * FROM SkinTypes WHERE skinTypeID = ?";
+    db.pool.query(query, [skinTypeID], function(error, results) {
+        if (error) {
+            console.error(error);
+            res.sendStatus(500);
+            return;
+        }
+        res.render('edit-skin-type', { skinType: results[0] });
+    });
+});
+
+// Route to update a SkinType
 router.post('/update/:id', function(req, res) {
-    const skinTypeId = req.params.id;
+    const skinTypeID = req.params.id;
     const data = req.body;
-    let updateQuery = 'UPDATE SkinTypes SET skinTypeDescription = ? WHERE skinTypeID = ?';
-
-    db.pool.query(updateQuery, [data.skinTypeDescription, skinTypeId], function(error, results) {
+    let query = "UPDATE SkinTypes SET description = ? WHERE skinTypeID = ?";
+    db.pool.query(query, [data.description, skinTypeID], function(error) {
         if (error) {
             console.error(error);
-            res.status(500).send('Server error while updating skinType.');
+            res.sendStatus(500);
             return;
         }
-        res.redirect('/SkinTypes');
+        res.redirect('/skintypes');
     });
 });
 
-// Route to delete a skinType
-router.post('/delete', function(req, res) {
-    const skinTypeId = req.body.skinTypeID;
-    const deleteskinTypeQuery = `DELETE FROM SkinTypes WHERE skinTypeID = ?`;
-
-    db.pool.query(deleteskinTypeQuery, [skinTypeId], function(error, results) {
+// Route to delete a SkinType
+router.post('/delete/:id', function(req, res) {
+    const skinTypeID = req.params.id;
+    let query = "DELETE FROM SkinTypes WHERE skinTypeID = ?";
+    db.pool.query(query, [skinTypeID], function(error) {
         if (error) {
             console.error(error);
-            return res.status(500).send('Error deleting skinType.');
+            res.sendStatus(500);
+            return;
         }
-        res.redirect('/SkinTypes');
+        res.redirect('/skintypes');
     });
 });
 

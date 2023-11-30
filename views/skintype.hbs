@@ -11,25 +11,15 @@
 
     <!-- Form for Adding a New Skin Type -->
     <h2>Add a New Skin Type</h2>
-    <form id="add-Skin Type-form" action="/Skin Types/add" method="POST">
-
+    <form id="add-skin-type-form" action="/skintypes/add" method="POST">
         <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea>
-
+        <input type="text" id="description" name="description" required>
         <input type="submit" value="Add Skin Type">
     </form>
 
-    <!-- Search Form for Skin Types -->
-    <h2>Search Skin Types</h2>
-    <form action="/Skin Types" method="get">
-        <label for="searchQuery">Search:</label>
-        <input type="text" id="searchQuery" name="search" value="{{searchQuery}}">
-        <input type="submit" value="Search">
-    </form>
-
-    <!-- Table for Displaying Skin Types -->
+    <!-- Table for Displaying and Editing Skin Types -->
     <h2>Available Skin Types</h2>
-    <table id="Skin Type-table">
+    <table id="skin-type-table">
         <thead>
             <tr>
                 <th>Skin Type ID</th>
@@ -38,21 +28,22 @@
             </tr>
         </thead>
         <tbody>
-            {{#each Skin Types}}
+            {{#each skinTypes}}
             <tr>
-                <td>{{this.Skin TypeID}}</td>
+                <td>{{this.skinTypeID}}</td>
                 <td>{{this.description}}</td>
                 <td>
-                    <!-- Edit and Delete Buttons -->
-                    <button onclick="toggleEditForm('edit-form-{{this.Skin TypeID}}')">Edit</button>
-                    <button data-id="{{this.Skin TypeID}}" onclick="deleteSkin Type(this)">Delete</button>
+                    <button onclick="toggleEditForm('{{this.skinTypeID}}')">Edit</button>
+                    <form action="/skintypes/delete/{{this.skinTypeID}}" method="post" onsubmit="return confirm('Are you sure you want to delete this Skin Type?');">
+                        <button type="submit">Delete</button>
+                    </form>
                 </td>
             </tr>
-            <tr id="edit-form-{{this.Skin TypeID}}" style="display:none;">
-                <td colspan="6">
+            <tr id="edit-form-{{this.skinTypeID}}" style="display:none;">
+                <td colspan="3">
                     <!-- Edit Form -->
-                    <form action="/Skin Types/update/{{this.Skin TypeID}}" method="post">
-                        <input type="text" name="description" value="{{this.description}}">
+                    <form action="/skintypes/update/{{this.skinTypeID}}" method="post">
+                        <input type="text" name="description" value="{{this.description}}" required>
                         <button type="submit">Save</button>
                     </form>
                 </td>
@@ -62,23 +53,8 @@
     </table>
 
     <script>
-        function deleteSkin Type(button) {
-            var Skin TypeId = button.getAttribute('data-id');
-            if (confirm('Are you sure you want to delete this Skin Type?')) {
-                fetch('/Skin Types/delete', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ Skin TypeID: Skin TypeId })
-                })
-                .then(response => {
-                    if (response.ok) { button.closest('tr').remove(); }
-                    else { alert('Failed to delete the Skin Type.'); }
-                })
-                .catch(error => { console.error('Error:', error); });
-            }
-        }
-
-        function toggleEditForm(formId) {
+        function toggleEditForm(skinTypeID) {
+            var formId = 'edit-form-' + skinTypeID;
             var form = document.getElementById(formId);
             form.style.display = (form.style.display === 'none') ? 'table-row' : 'none';
         }
