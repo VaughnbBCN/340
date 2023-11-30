@@ -25,7 +25,8 @@ var customerRoutes = require('./routes/customers');
 var productRoutes = require('./routes/products');
 var serviceRoutes = require('./routes/services');
 var appointmentRoutes = require('./routes/appointments');
-var orderRoutes = require('./routes/orders')
+var orderRoutes = require('./routes/orders');
+var skintypeRoutes = require('./routes/skintypes');
 
 // Use the routes
 app.use('/', indexRoutes);
@@ -33,7 +34,8 @@ app.use('/customers', customerRoutes);
 app.use('/products', productRoutes);
 app.use('/services', serviceRoutes);
 app.use('/appointments', appointmentRoutes);
-app.use('/orders' orderRoutes);
+app.use('/orders', orderRoutes);
+app.use('/skintypes', skintypeRoutes);
 
 // Start the server
 app.listen(PORT, function() {
