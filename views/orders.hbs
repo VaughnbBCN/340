@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <!-- Add links to your CSS files here -->
+</head>
+<body>
+    <h1>Order Management</h1>
+
+    <!-- Form for Adding a New Order -->
+    <h2>Add a New Order</h2>
+    <form id="add-order-form" action="/orders/add" method="POST">
+        <label for="customerID">CustomerID:</label>
+        <input type="text" id="customerID" name="customerID" required>
+
+        <label for="orderDate">Order Date (HH:MM:SS):</label>
+        <input type="text" pattern="\d{1,2}:\d{2}:\d{2}" title="Enter time in HH:MM:SS format." id="orderDate" name="orderDate" required>
+
+
+        <label for="totalAmount">Total Amount ($):</label>
+        <input type="text" pattern="^\d+(\.\d{0,2})?$" title="Price must be a number with up to two decimal places." id="totalAmount" name="totalAmount" required>
+
+        <input type="submit" value="Add Order">
+    </form>
+
+    <!-- Search Form for orders -->
+    <h2>Search orders</h2>
+    <form action="/orders" method="get">
+        <label for="searchQuery">Search:</label>
+        <input type="text" id="searchQuery" name="search" value="{{searchQuery}}">
+        <input type="submit" value="Search">
+    </form>
+
+    <!-- Table for Displaying orders -->
+    <h2>Available orders</h2>
+    <table id="order-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Order Date</th>
+                <th>Total Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
+                <td>{{this.orderID}}</td>
+                <td>{{this.customerID}}</td>
+                <td>${{this.orderDate}}</td>
+                <td>{{this.totalAmount}}</td>
+                <td>
+                    <!-- Edit and Delete Buttons -->
+                    <button onclick="toggleEditForm('edit-form-{{this.orderID}}')">Edit</button>
+                    <button data-id="{{this.orderID}}" onclick="deleteorder(this)">Delete</button>
+                </td>
+            </tr>
+            <tr id="edit-form-{{this.orderID}}" style="display:none;">
+                <td colspan="6">
+                    <!-- Edit Form -->
+                    <form action="/orders/update/{{this.orderID}}" method="post">
+                        <input type="text" name="customerID" value="{{this.customerID}}">
+                        <input type="text" name="orderDate" value="{{this.orderDate}}">
+                        <input type="text" name="totalAmount" value="{{this.totalAmount}}">
+                        <button type="submit">Save</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <script>
+        function deleteorder(button) {
+            var orderId = button.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this order?')) {
+                fetch('/orders/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderID: orderId })
+                })
+                .then(response => {
+                    if (response.ok) { button.closest('tr').remove(); }
+                    else { alert('Failed to delete the order.'); }
+                })
+                .catch(error => { console.error('Error:', error); });
+            }
+        }
+
+        function toggleEditForm(formId) {
+            var form = document.getElementById(formId);
+            form.style.display = (form.style.display === 'none') ? 'table-row' : 'none';
+        }
+    </script>
+</body>
+</html>
