@@ -66,7 +66,7 @@ router.post('/delete', function(req, res) {
             return res.status(500).send('Error deleting order.');
         }
         res.redirect('/orders');
-    };
+    }); // This is where the closing brace and parenthesis were missing
 });
 
 module.exports = router;
